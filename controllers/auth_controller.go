@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
 )
 
 // Signup handler
@@ -13,6 +14,7 @@ func Signup(c *gin.Context) {
 	var request struct {
 		Email    string `json:"email" binding:"required"`
 		Password string `json:"password" binding:"required"`
+		Name     string `json:"name" binding:"required"`
 	}
 
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -21,7 +23,7 @@ func Signup(c *gin.Context) {
 	}
 
 	// Create user in Firebase Auth
-	uid, err := services.CreateUser(request.Email, request.Password)
+	uid, err := services.CreateUser(request.Email, request.Password, request.Name)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

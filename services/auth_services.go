@@ -6,18 +6,20 @@ import (
 	"log"
 
 	"firebase.google.com/go/auth"
+
 )
 
 // CreateUser registers a new user in Firebase Auth
-func CreateUser(email, password string) (string, error) {
+func CreateUser(email, password,name string) (string, error) {
 	client, err := config.FirebaseApp.Auth(context.Background())
 	if err != nil {
+		log.Default().Println("Error creating Firebase client:", err)
 		return "", err
 	}
 
 	params := (&auth.UserToCreate{}).
 		Email(email).
-		Password(password)
+		Password(password).DisplayName(name)
 
 	user, err := client.CreateUser(context.Background(), params)
 	if err != nil {
